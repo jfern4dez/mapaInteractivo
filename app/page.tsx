@@ -50,7 +50,7 @@ export default function Home() {
                 <div className="flex items-center gap-2">
                     {/* MODIFICACIÓN: Cambiamos el <span className="text-xl">📍</span> por tu imagen .jfif */}
                     <img
-                        src="/mapainteractivo/todoalron.jfif"
+                        src="/todoalron.png"
                         alt="Todo al Ron Logo"
                         className="w-15 h-15 rounded-full border border-gray-200 object-cover"
                         referrerPolicy="no-referrer"
