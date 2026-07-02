@@ -1,7 +1,12 @@
 self.__BUILD_MANIFEST = {
   "__rewrites": {
     "afterFiles": [],
-    "beforeFiles": [],
+    "beforeFiles": [
+      {
+        "source": "/mapainteractivo//_next/:path+",
+        "destination": "/mapainteractivo/_next/:path+"
+      }
+    ],
     "fallback": []
   },
   "sortedPages": [
