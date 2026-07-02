@@ -1,12 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    output: 'export', // Obligatorio para generar HTML estático en /out para GitHub Pages
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+    output: 'export',
     images: {
-        unoptimized: true, // Obligatorio para GitHub Pages
+        unoptimized: true,
     },
-    // Si tu repositorio en GitHub NO se llama "tu-usuario.github.io" 
-    // (por ejemplo, si se llama "todo-al-ron-mapa"), descomenta la línea de abajo:
-    // basePath: '/nombre-de-tu-repositorio',
+    // Requerido para la navegación interna de Next.js
+    basePath: '/mapainteractivo',
+    // SOLUCIÓN DEFINITIVA: Requerido para que los archivos CSS y JS carguen en GitHub Pages
+    assetPrefix: '/mapainteractivo/',
 };
 
-module.exports = nextConfig;
+export default nextConfig;

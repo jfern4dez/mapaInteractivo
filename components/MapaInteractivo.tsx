@@ -9,6 +9,15 @@ import FormularioFoto from './FormularioFoto';
 import PopupMarcador from './PopupMarcador';
 import ListaFotos from './ListaFotos';
 
+if (typeof window !== 'undefined') {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: '/mapainteractivo/images/marker-icon-2x.png',
+        iconUrl: '/mapainteractivo/images/marker-icon.png',
+        shadowUrl: '/mapainteractivo/images/marker-shadow.png',
+    });
+}
+
 const iconEditor = typeof window !== 'undefined' ? new L.Icon({
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
