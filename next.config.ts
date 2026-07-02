@@ -1,14 +1,16 @@
 import type { NextConfig } from "next";
 
+// Detecta si estamos compilando en los servidores de GitHub Actions
+const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
+
 const nextConfig: NextConfig = {
     output: 'export',
     images: {
         unoptimized: true,
     },
-    // Requerido para la navegación interna de Next.js
-    basePath: '/mapainteractivo',
-    // SOLUCIÓN DEFINITIVA: Requerido para que los archivos CSS y JS carguen en GitHub Pages
-    assetPrefix: '/mapainteractivo/',
+    // Solo aplica el basePath y assetPrefix si se compila en GitHub Pages
+    basePath: isGithubActions ? '/mapainteractivo' : '',
+    assetPrefix: isGithubActions ? '/mapainteractivo/' : '',
 };
 
 export default nextConfig;
