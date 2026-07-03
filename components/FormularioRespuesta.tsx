@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db, storage, auth } from '../app/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -19,6 +19,9 @@ export default function FormularioRespuesta({ marcadorId, onCancelar, onSubiendo
     const [usuario, setUsuario] = useState<User | null>(null);
     const [cargandoAuth, setCargandoAuth] = useState(true);
     const [progreso, setProgreso] = useState(0);
+
+    // Referencia para activar el input oculto de la cámara
+    const inputCamaraRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const desuscribir = onAuthStateChanged(auth, (user) => {
@@ -92,6 +95,13 @@ export default function FormularioRespuesta({ marcadorId, onCancelar, onSubiendo
         }
     };
 
+    // Manejador para capturar la foto tomada desde la cámara trasera
+    const handleCamaraChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImagen(e.target.files[0]);
+        }
+    };
+
     if (cargandoAuth) {
         return <p className="text-xs text-gray-500 p-1">Verificando permisos...</p>;
     }
@@ -109,7 +119,36 @@ export default function FormularioRespuesta({ marcadorId, onCancelar, onSubiendo
 
     return (
         <form onSubmit={handleGuardar} className="mt-2 pt-3 border-t flex flex-col gap-2.5 text-gray-800">
-            <SelectorImagen imagenSeleccionada={imagen} onImagenSeleccionada={setImagen} />
+
+            {/* Contenedor flex para alinear el SelectorImagen con el botón de la cámara */}
+            <div className="flex items-end gap-2 w-full">
+                <div className="flex-1">
+                    <SelectorImagen imagenSeleccionada={imagen} onImagenSeleccionada={setImagen} />
+                </div>
+
+                {/* Botón Cuadrado de Cámara */}
+                <button
+                    type="button"
+                    onClick={() => inputCamaraRef.current?.click()}
+                    className="flex items-center justify-center h-[46px] w-[46px] border rounded-xl hover:bg-gray-50 transition-colors bg-white shadow-sm flex-shrink-0"
+                    title="Sacar foto con la cámara"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-700">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                    </svg>
+                </button>
+
+                {/* Input nativo oculto configurado para abrir la cámara */}
+                <input
+                    type="file"
+                    ref={inputCamaraRef}
+                    onChange={handleCamaraChange}
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                />
+            </div>
 
             <textarea
                 value={descripcion}
